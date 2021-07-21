@@ -29,6 +29,7 @@ pub fn render(text: &str, content: &Context) -> String {
   handlebars.register_helper("snakecase", Box::new(helpers::snakecase_helper));
   handlebars.register_helper("kebabcase", Box::new(helpers::kebabcase_helper));
   handlebars.register_helper("constantcase", Box::new(helpers::constantcase_helper));
+  handlebars.register_helper("capitalcase", Box::new(helpers::capitalcase_helper));
 
   // create the render context with the provided variables
   let context = match handlebars::Context::wraps(content) {
@@ -103,7 +104,7 @@ mod tests {
   #[test]
   fn test_render_transformation_values() -> Result<(), Box<dyn std::error::Error>> {
     let text =
-      "{{ camelcase values.full_name }},{{ constantcase values.full_name }},{{ kebabcase values.full_name }},{{ lowercase values.full_name }},{{ pascalcase values.full_name }},{{ snakecase values.full_name }},{{ uppercase values.full_name }}";
+      "{{ camelcase values.full_name }},{{ constantcase values.full_name }},{{ kebabcase values.full_name }},{{ lowercase values.full_name }},{{ pascalcase values.full_name }},{{ snakecase values.full_name }},{{ uppercase values.full_name }},{{ capitalcase values.full_name }}";
     let mut values = HashMap::new();
     values.insert(String::from("full_name"), String::from("ThomasPöhlmann"));
     let content: Context = Context {
@@ -118,7 +119,7 @@ mod tests {
 
     assert_eq!(
       result,
-      "thomasPöhlmann,THOMAS_PÖHLMANN,thomas-pöhlmann,thomaspöhlmann,ThomasPöhlmann,thomas_pöhlmann,THOMASPÖHLMANN"
+      "thomasPöhlmann,THOMAS_PÖHLMANN,thomas-pöhlmann,thomaspöhlmann,ThomasPöhlmann,thomas_pöhlmann,THOMASPÖHLMANN,Thomas Pöhlmann"
     );
 
     Ok(())

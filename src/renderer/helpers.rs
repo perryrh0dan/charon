@@ -123,3 +123,20 @@ pub fn constantcase_helper(
   out.write(rendered.as_ref())?;
   Ok(())
 }
+
+pub fn capitalcase_helper(
+  h: &Helper,
+  _: &Handlebars,
+  _: &Context,
+  _: &mut RenderContext,
+  out: &mut dyn Output,
+) -> Result<(), RenderError> {
+  // get parameter from helper or throw an error
+  let param = h
+      .param(0)
+      .ok_or(RenderError::new("Param 0 is required for format helper."))?;
+
+  let rendered = param.value().render().to_string().to_case(Case::Title);
+  out.write(rendered.as_ref())?;
+  Ok(())
+}
